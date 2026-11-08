@@ -1,0 +1,774 @@
+package com.example.mobilesecuritylab
+
+import android.os.Bundle
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
+import java.net.HttpURLConnection
+import java.net.URL
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+
+private const val HEALTH_URL =
+    "http://192.168.68.128:8000/health"
+
+private val CyberBackground = Color(0xFF08111F)
+private val CyberGreen = Color(0xFF36E6A0)
+private val CyberCard = Color(0xFF142238)
+private val CyberRed = Color(0xFFFF6B6B)
+
+data class HealthResult(
+    val message: String,
+    val httpCode: Int?,
+    val responseBody: String,
+    val responseTimeMs: Long,
+    val online: Boolean,
+    val checkedAt: String = SimpleDateFormat(
+        "HH:mm:ss",
+        Locale.getDefault()
+    ).format(Date())
+)
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            MaterialTheme {
+                CyberLabApp()
+            }
+        }
+    }
+}
+
+@Composable
+fun CyberLabApp() {
+    var status by remember {
+        mutableStateOf("Ready — no connection tested yet")
+    }
+    var isChecking by remember { mutableStateOf(false) }
+    var lastChecked by remember { mutableStateOf("Never") }
+    var isOnline by remember { mutableStateOf<Boolean?>(null) }
+    var selectedModule by remember { mutableStateOf<String?>(null) }
+    var healthResult by remember { mutableStateOf<HealthResult?>(null) }
+
+    // Shared recent-test history for Network Diagnostics and Activity Log.
+    val healthHistory = remember {
+        mutableStateListOf<HealthResult>()
+    }
+
+    val scope = rememberCoroutineScope()
+
+    fun checkServer() {
+        if (isChecking) return
+
+        scope.launch {
+            isChecking = true
+            status = "Checking Kali server..."
+
+            val result = withContext(Dispatchers.IO) {
+                checkCyberLabServer()
+            }
+
+            healthResult = result
+
+            // Record every completed health check automatically.
+            healthHistory.add(0, result)
+
+            // Keep the most recent 50 records.
+            while (healthHistory.size > 50) {
+                healthHistory.removeAt(healthHistory.lastIndex)
+            }
+
+            status = result.message
+            isOnline = result.online
+            lastChecked = result.checkedAt
+            isChecking = false
+        }
+    }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = CyberBackground
+    ) {
+        when (selectedModule) {
+            null -> DashboardScreen(
+                status = status,
+                isChecking = isChecking,
+                lastChecked = lastChecked,
+                isOnline = isOnline,
+                onCheckLab = { checkServer() },
+                onOpenModule = { selectedModule = it }
+            )
+
+            "Network Tools" -> NetworkToolsScreen(
+                result = healthResult,
+                isChecking = isChecking,
+                onCheck = { checkServer() },
+                onBack = { selectedModule = null }
+            )
+
+            "Network Diagnostics" -> NetworkDiagnosticsScreen(
+                history = healthHistory,
+                isChecking = isChecking,
+                onCheck = { checkServer() },
+                onBack = { selectedModule = null }
+            )
+
+            "Lab Activity Log" -> LabActivityLogScreen(
+                history = healthHistory,
+                onClearHistory = {
+                    healthHistory.clear()
+                },
+                onBack = { selectedModule = null }
+            )
+
+            else -> LearningModuleScreen(
+                module = selectedModule!!,
+                onBack = { selectedModule = null }
+            )
+        }
+    }
+}
+
+@Composable
+fun DashboardScreen(
+    status: String,
+    isChecking: Boolean,
+    lastChecked: String,
+    isOnline: Boolean?,
+    onCheckLab: () -> Unit,
+    onOpenModule: (String) -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
+    ) {
+        Text(
+            "CYBERLAB",
+            color = CyberGreen,
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            "Cybersecurity Learning Toolkit",
+            color = Color.White,
+            fontSize = 16.sp
+        )
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(CyberCard, RoundedCornerShape(18.dp))
+                .padding(20.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text(
+                "LAB STATUS",
+                color = CyberGreen,
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(status, color = Color.White, fontSize = 15.sp)
+
+            Text(
+                when (isOnline) {
+                    true -> "● ONLINE"
+                    false -> "● OFFLINE"
+                    null -> "● NOT TESTED"
+                },
+                color = when (isOnline) {
+                    true -> CyberGreen
+                    false -> CyberRed
+                    null -> Color.LightGray
+                },
+                fontWeight = FontWeight.Bold
+            )
+
+            Text(
+                "Last checked: $lastChecked",
+                color = Color.LightGray,
+                fontSize = 12.sp
+            )
+
+            Button(
+                onClick = onCheckLab,
+                enabled = !isChecking,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(if (isChecking) "Checking..." else "Check Lab")
+            }
+        }
+
+        Text(
+            "LEARNING MODULES",
+            color = CyberGreen,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        ModuleCard(
+            "01", "Networking Basics",
+            "IP addresses, ports, DNS and HTTP"
+        ) { onOpenModule("Networking Basics") }
+
+        ModuleCard(
+            "02", "Android Security",
+            "Permissions and app safety"
+        ) { onOpenModule("Android Security") }
+
+        ModuleCard(
+            "03", "Kali Linux Lab",
+            "Linux commands and lab basics"
+        ) { onOpenModule("Kali Linux Lab") }
+
+        ModuleCard(
+            "04", "Network Tools",
+            "Health check, response time and JSON"
+        ) { onOpenModule("Network Tools") }
+
+        ModuleCard(
+            "05", "Network Diagnostics",
+            "Connection analysis and recent test history"
+        ) { onOpenModule("Network Diagnostics") }
+
+        ModuleCard(
+            "06", "Lab Activity Log",
+            "View, filter and clear health-check records"
+        ) { onOpenModule("Lab Activity Log") }
+
+        Text(
+            "Educational use • Test only your own lab",
+            color = Color.LightGray,
+            fontSize = 12.sp
+        )
+    }
+}
+
+@Composable
+fun ModuleCard(
+    number: String,
+    title: String,
+    subtitle: String,
+    onClick: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(CyberCard, RoundedCornerShape(16.dp))
+            .clickable(onClick = onClick)
+            .padding(18.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(number, color = CyberGreen, fontSize = 13.sp)
+
+        Text(
+            title,
+            color = Color.White,
+            fontSize = 17.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(subtitle, color = Color.LightGray, fontSize = 13.sp)
+        Text("Open module →", color = CyberGreen, fontSize = 13.sp)
+    }
+}
+
+@Composable
+fun NetworkToolsScreen(
+    result: HealthResult?,
+    isChecking: Boolean,
+    onCheck: () -> Unit,
+    onBack: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(18.dp)
+    ) {
+        Button(onClick = onBack) {
+            Text("← Back to Dashboard")
+        }
+
+        Text(
+            "NETWORK TOOLS",
+            color = CyberGreen,
+            fontSize = 25.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            "Target: your own CyberLab health endpoint",
+            color = Color.LightGray,
+            fontSize = 14.sp
+        )
+
+        Text(HEALTH_URL, color = Color.White, fontSize = 14.sp)
+
+        Button(
+            onClick = onCheck,
+            enabled = !isChecking,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(if (isChecking) "Checking..." else "Run Health Check")
+        }
+
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(CyberCard, RoundedCornerShape(16.dp))
+                .padding(18.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            Text("RESULTS", color = CyberGreen, fontWeight = FontWeight.Bold)
+
+            if (result == null) {
+                Text(
+                    "No test run yet. Tap Run Health Check.",
+                    color = Color.White
+                )
+            } else {
+                Text(
+                    if (result.online) "● ONLINE" else "● UNAVAILABLE",
+                    color = if (result.online) CyberGreen else CyberRed,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    "HTTP status: ${result.httpCode ?: "No response"}",
+                    color = Color.White
+                )
+                Text(
+                    "Response time: ${result.responseTimeMs} ms",
+                    color = Color.White
+                )
+                Text(
+                    "Server response:",
+                    color = CyberGreen,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    result.responseBody.ifBlank {
+                        "No response body available."
+                    },
+                    color = Color.White,
+                    fontSize = 13.sp
+                )
+                Text(result.message, color = Color.LightGray, fontSize = 13.sp)
+            }
+        }
+
+        Text(
+            "This tool checks only the configured lab health endpoint.",
+            color = Color.LightGray,
+            fontSize = 12.sp
+        )
+    }
+}
+
+@Composable
+fun NetworkDiagnosticsScreen(
+    history: List<HealthResult>,
+    isChecking: Boolean,
+    onCheck: () -> Unit,
+    onBack: () -> Unit
+) {
+    val latest = history.firstOrNull()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(18.dp)
+    ) {
+        Button(onClick = onBack) {
+            Text("← Back to Dashboard")
+        }
+
+        Text(
+            "NETWORK DIAGNOSTICS",
+            color = CyberGreen,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            "Check the connection to your own Kali lab server.",
+            color = Color.LightGray,
+            fontSize = 14.sp
+        )
+
+        Button(
+            onClick = onCheck,
+            enabled = !isChecking,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(if (isChecking) "Testing..." else "Run Diagnostic Test")
+        }
+
+        Text("LATEST RESULT", color = CyberGreen, fontWeight = FontWeight.Bold)
+
+        if (latest == null) {
+            Text(
+                "No tests yet. Run a diagnostic test to begin.",
+                color = Color.White
+            )
+        } else {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(CyberCard, RoundedCornerShape(16.dp))
+                    .padding(18.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
+            ) {
+                Text(
+                    if (latest.online) "● SERVER ONLINE"
+                    else "● SERVER UNAVAILABLE",
+                    color = if (latest.online) CyberGreen else CyberRed,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text("Checked at: ${latest.checkedAt}", color = Color.White)
+                Text(
+                    "HTTP status: ${latest.httpCode ?: "No response"}",
+                    color = Color.White
+                )
+                Text(
+                    "Response time: ${latest.responseTimeMs} ms",
+                    color = Color.White
+                )
+
+                Text(
+                    "What this means",
+                    color = CyberGreen,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    when {
+                        latest.httpCode == null ->
+                            "No HTTP response was received. Check that the Kali server is running and the emulator can reach it."
+
+                        latest.httpCode == 200 && latest.online ->
+                            "HTTP 200 means the request succeeded. The server returned an online status."
+
+                        latest.httpCode in 200..299 ->
+                            "The server returned a successful HTTP status, but its response did not contain the expected online status."
+
+                        else ->
+                            "The server responded with a non-success HTTP status. Check the status code and server configuration."
+                    },
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    lineHeight = 21.sp
+                )
+            }
+        }
+
+        Text(
+            "RECENT TEST HISTORY",
+            color = CyberGreen,
+            fontWeight = FontWeight.Bold
+        )
+
+        if (history.isEmpty()) {
+            Text("Your recent tests will appear here.", color = Color.LightGray)
+        } else {
+            history.forEachIndexed { index, item ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(CyberCard, RoundedCornerShape(12.dp))
+                        .padding(14.dp),
+                    verticalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        "Test ${index + 1} • ${item.checkedAt}",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        if (item.online) "ONLINE" else "UNAVAILABLE",
+                        color = if (item.online) CyberGreen else CyberRed
+                    )
+                    Text(
+                        "HTTP ${item.httpCode ?: "N/A"} • ${item.responseTimeMs} ms",
+                        color = Color.LightGray,
+                        fontSize = 13.sp
+                    )
+                }
+            }
+        }
+
+        Text(
+            "History lasts only while this app session is active.",
+            color = Color.LightGray,
+            fontSize = 12.sp
+        )
+    }
+}
+
+@Composable
+fun LabActivityLogScreen(
+    history: List<HealthResult>,
+    onClearHistory: () -> Unit,
+    onBack: () -> Unit
+) {
+    var filter by remember { mutableStateOf("ALL") }
+
+    val filteredHistory = history.filter { item ->
+        when (filter) {
+            "SUCCESS" -> item.online
+            "FAILED" -> !item.online
+            else -> true
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        Button(onClick = onBack) {
+            Text("← Back to Dashboard")
+        }
+
+        Text(
+            "LAB ACTIVITY LOG",
+            color = CyberGreen,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            "Automatically records completed health checks.",
+            color = Color.LightGray,
+            fontSize = 14.sp
+        )
+
+        Text(
+            "Total records: ${history.size}",
+            color = Color.White,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text("FILTER RECORDS", color = CyberGreen, fontWeight = FontWeight.Bold)
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            Button(
+                onClick = { filter = "ALL" },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("All")
+            }
+            Button(
+                onClick = { filter = "SUCCESS" },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Success")
+            }
+            Button(
+                onClick = { filter = "FAILED" },
+                modifier = Modifier.weight(1f)
+            ) {
+                Text("Failed")
+            }
+        }
+
+        if (filteredHistory.isEmpty()) {
+            Text(
+                if (history.isEmpty()) {
+                    "No activity yet. Open Network Tools and run a health check."
+                } else {
+                    "No records match this filter."
+                },
+                color = Color.LightGray
+            )
+        } else {
+            filteredHistory.forEachIndexed { index, item ->
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(CyberCard, RoundedCornerShape(14.dp))
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    Text(
+                        "Activity ${index + 1} • ${item.checkedAt}",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        if (item.online) "SUCCESS — Server online"
+                        else "FAILED — Server unavailable",
+                        color = if (item.online) CyberGreen else CyberRed,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Text(
+                        "HTTP status: ${item.httpCode ?: "No response"}",
+                        color = Color.White
+                    )
+
+                    Text(
+                        "Response time: ${item.responseTimeMs} ms",
+                        color = Color.White
+                    )
+
+                    Text(
+                        item.message,
+                        color = Color.LightGray,
+                        fontSize = 13.sp
+                    )
+                }
+            }
+        }
+
+        Button(
+            onClick = onClearHistory
+        ) {
+            Text("Clear Activity History")
+        }
+    }
+}
+private fun checkCyberLabServer(): HealthResult {
+    val startTime = System.currentTimeMillis()
+    var connection: HttpURLConnection? = null
+
+    return try {
+        connection = URL(HEALTH_URL).openConnection()
+                as HttpURLConnection
+
+        connection.requestMethod = "GET"
+        connection.connectTimeout = 5000
+        connection.readTimeout = 5000
+
+        val code = connection.responseCode
+        val stream = if (code in 200..399) {
+            connection.inputStream
+        } else {
+            connection.errorStream
+        }
+
+        val body = stream?.bufferedReader()?.use {
+            it.readText()
+        } ?: ""
+
+        val online = code == 200 &&
+                body.contains("online", ignoreCase = true)
+
+        HealthResult(
+            message = if (online) {
+                "Connected — CyberLab server online"
+            } else {
+                "Server responded with HTTP $code"
+            },
+            httpCode = code,
+            responseBody = body,
+            responseTimeMs =
+                System.currentTimeMillis() - startTime,
+            online = online
+        )
+    } catch (e: Exception) {
+        HealthResult(
+            message = "Connection failed: ${
+                e.message ?: "Unknown error"
+            }",
+            httpCode = null,
+            responseBody = "",
+            responseTimeMs =
+                System.currentTimeMillis() - startTime,
+            online = false
+        )
+    } finally {
+        connection?.disconnect()
+    }
+}
+
+@Composable
+fun LearningModuleScreen(
+    module: String,
+    onBack: () -> Unit
+) {
+    val details = when (module) {
+        "Networking Basics" -> """
+            • IP addresses identify devices on a network.
+            • Ports identify services on a device.
+            • DNS translates domain names into IP addresses.
+            • HTTP is used for web communication.
+        """.trimIndent()
+
+        "Android Security" -> """
+            • Android apps request permissions for protected features.
+            • Install apps only from trusted sources.
+            • Review permissions before granting access.
+            • Keep Android and apps updated.
+        """.trimIndent()
+
+        "Kali Linux Lab" -> """
+            • pwd displays your current directory.
+            • ls lists files and folders.
+            • cd changes directories.
+            • Practice commands only in your own lab.
+        """.trimIndent()
+
+        else -> "Select a learning module from the dashboard."
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .padding(24.dp),
+        verticalArrangement = Arrangement.spacedBy(18.dp)
+    ) {
+        Button(onClick = onBack) {
+            Text("← Back to Dashboard")
+        }
+
+        Text(
+            module,
+            color = CyberGreen,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold
+        )
+
+        Text(
+            details,
+            color = Color.White,
+            fontSize = 16.sp,
+            lineHeight = 25.sp
+        )
+    }
+}
