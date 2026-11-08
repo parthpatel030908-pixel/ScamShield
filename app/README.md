@@ -1,35 +1,48 @@
 # 🛡️ ScamShield — Android Scam Link Scanner & Cybersecurity Learning Lab
 
-![ScamShield Icon](assets/scamshield-icon.png)
+<div align="center">
 
-**Scan • Learn • Stay Safe**
+<img src="assets/scamshield-icon.png" width="180" alt="ScamShield App Icon">
 
-ScamShield is an Android cybersecurity application developed using Kotlin and Jetpack Compose. It combines multi-source URL threat checking, scan management, security reports, and beginner-friendly cybersecurity learning modules in one application.
+**SCAN • LEARN • STAY SAFE**
 
-The project demonstrates practical Android development, REST API integration, backend communication, URL analysis, and cybersecurity awareness.
+An Android cybersecurity application built with Kotlin and Jetpack Compose.
+
+</div>
 
 ---
 
 ## 📸 Application Screenshots
 
 ### 1. ScamShield Dashboard
-![ScamShield Dashboard](screenshots/Screenshot%201.png)
+
+![ScamShield Dashboard](./screenshots/Screenshot%201.png)
 
 ### 2. Cybersecurity Learning Lab
-![Learning Lab Modules](screenshots/Screenshot%202.png)
+
+![Learning Lab Modules](./screenshots/Screenshot%202.png)
 
 ### 3. Link Scanner Interface
-![Link Scanner Interface](screenshots/Screenshot%203.png)
+
+![Link Scanner Interface](./screenshots/Screenshot%203.png)
 
 ### 4. URL Scanning and Threat Analysis
-![URL Scanning and Threat Analysis](screenshots/Screenshot%204.png)
+
+![URL Scanning and Threat Analysis](./screenshots/Screenshot%204.png)
 
 ### 5. Scan History
-![Scan History](screenshots/Screenshot%205.png)
+
+![Scan History](./screenshots/Screenshot%205.png)
 
 ---
 
-## 🚀 Features
+## 🚀 Project Overview
+
+ScamShield is an Android cybersecurity application that combines multi-source URL threat checking, scan management, security reports, and beginner-friendly cybersecurity learning modules in one application.
+
+The project demonstrates practical Android development, backend integration, REST API communication, URL analysis, and cybersecurity awareness.
+
+## ✨ Features
 
 ### 1. Link Scanner & Threat Detection
 - Scan HTTP and HTTPS URLs.
@@ -38,7 +51,6 @@ The project demonstrates practical Android development, REST API integration, ba
 - Show scan reliability information.
 - Explain warnings and detection limitations.
 - Validate URL input before scanning.
-- Identify certain invalid or unreachable domains.
 
 ### 2. Scan History Management
 - Save previous scan records.
@@ -47,18 +59,18 @@ The project demonstrates practical Android development, REST API integration, ba
 - Copy scanned URLs.
 - Delete individual records.
 - Clear all scan history.
-- Preserve scan history after restarting the application.
+- Preserve records after restarting the app.
 
 ### 3. Link Sharing & Clipboard Scanning
 - Share URLs from other Android applications directly to ScamShield.
-- Automatically place shared URLs into the scanner.
+- Automatically populate the scanner with shared URLs.
 - Scan URLs copied to the clipboard.
 
 ### 4. Advanced URL Analysis
 - Local URL risk analysis using heuristic checks.
 - Duplicate URL detection.
 - Save frequently used URLs as bookmarks.
-- Add personal notes to saved scan records.
+- Add personal notes to scan records.
 - View detailed scan information and source evidence.
 
 ### 5. Security Reports & Analytics
@@ -94,12 +106,12 @@ The project demonstrates practical Android development, REST API integration, ba
 
 | Technology | Purpose |
 |---|---|
-| Kotlin | Android application development |
+| Kotlin | Android development |
 | Android Studio | Development environment |
 | Jetpack Compose | User interface |
 | Python | Backend development |
 | REST APIs | Client-server communication |
-| URLhaus | Malicious URL intelligence |
+| URLhaus | Threat intelligence |
 | Google Safe Browsing | Threat detection |
 | SharedPreferences | Local data persistence |
 | Android PdfDocument | PDF report generation |
@@ -133,20 +145,20 @@ https://scamshield-1-d2jy.onrender.com
 
 ## ⚠️ Security Limitations
 
-- A result of `NO_KNOWN_THREAT_FOUND` does not guarantee that a URL is safe.
+- `NO_KNOWN_THREAT_FOUND` does not guarantee that a URL is safe.
 - Threat databases may not contain newly created or unreported malicious links.
-- Detection depends on the availability and responses of external threat-intelligence services.
+- Detection depends on external threat-intelligence service availability.
 - Local URL risk analysis is heuristic-based and is not equivalent to verified threat intelligence.
-- ScamShield is an educational project and should not be treated as a replacement for professional security software.
-- API credentials are managed on the backend and should never be embedded in the Android application or committed to a public repository.
+- ScamShield is an educational project, not a replacement for professional security software.
+- API credentials should remain on the backend and must never be embedded in the Android application or committed to a public repository.
 
-**Important:** Always exercise caution before opening unfamiliar links, even when a scanner reports no known threat.
+Always exercise caution before opening unfamiliar links, even when a scanner reports no known threat.
 
 ---
 
 ## 🎯 Project Objective
 
-To develop a practical Android cybersecurity application that demonstrates URL threat-intelligence integration, backend communication, scan management, security reporting, and interactive cybersecurity education.
+To develop a practical Android cybersecurity application demonstrating URL threat-intelligence integration, backend communication, scan management, security reporting, and interactive cybersecurity education.
 
 ---
 
@@ -158,9 +170,9 @@ To develop a practical Android cybersecurity application that demonstrates URL t
 - Kotlin support
 - Internet connection
 
-### Setup
+### Installation
 
-1. Clone this repository:
+1. Clone the repository:
 
    `git clone https://github.com/parthpatel030908-pixel/ScamShield.git`
 
@@ -193,4 +205,8 @@ Built as a learning and portfolio project to explore practical Android developme
 
 ---
 
-*Scan • Learn • Stay Safe — ScamShield*
+<div align="center">
+
+**🛡️ ScamShield — Scan • Learn • Stay Safe**
+
+</div>
