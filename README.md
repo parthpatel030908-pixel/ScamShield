@@ -12,23 +12,23 @@ It combines multi-source URL threat checking with an interactive cybersecurity l
 
 ### 1. ScamShield Dashboard
 
-![ScamShield Dashboard](screenshots/dashboard.png)
+![ScamShield Dashboard](screenshots/screenshot1.png)
 
 ### 2. Learning Lab Modules
 
-![Learning Lab Modules](screenshots/learning-lab.png)
+![Learning Lab Modules](screenshots/screenshot2.png)
 
 ### 3. Link Scanner Interface
 
-![Link Scanner Interface](screenshots/link-scanner.png)
+![Link Scanner Interface](screenshots/screenshot3.png)
 
 ### 4. URL Scanning and Threat Analysis
 
-![URL Scanning and Threat Analysis](screenshots/threat-analysis.png)
+![URL Scanning and Threat Analysis](screenshots/screenshot4.png)
 
 ### 5. Scan History
 
-![Scan History](screenshots/scan-history.png)
+![Scan History](screenshots/screenshot5.png)
 
 ---
 
@@ -105,7 +105,8 @@ ScamShield follows a client-server architecture.
 
 ## 🌐 Backend API
 
-**Backend URL:**  
+**Backend URL:**
+
 https://scamshield-1-d2jy.onrender.com
 
 | Endpoint | Purpose |
@@ -121,7 +122,7 @@ The backend uses configured threat-intelligence services to evaluate submitted U
 
 - A `NO_KNOWN_THREAT_FOUND` result does not guarantee that a URL is safe.
 - Newly created or unreported malicious URLs may not appear in threat databases.
-- Local risk analysis is heuristic and should not be treated as definitive detection.
+- Local URL risk analysis is heuristic and should not be treated as definitive detection.
 - Third-party service availability can affect scan results.
 - API credentials are kept on the backend and should never be committed to the public repository.
 - ScamShield is an educational security application, not a replacement for professional security software.
@@ -161,7 +162,7 @@ The objective of ScamShield is to make basic cybersecurity awareness more access
 First-Year Computer Engineering Student  
 Government Engineering College, Bhavnagar
 
-Interests: Cybersecurity | Android Development | Technology
+**Interests:** Cybersecurity | Android Development | Technology
 
 ---
 
