@@ -1,117 +1,90 @@
 # 🛡️ ScamShield — Android Scam Link Scanner & Cybersecurity Learning Lab
 
-<div align="center">
+<p align="center">
+  <img src="app/src/main/java/com/example/mobilesecuritylab/assets/scamshieldicon2.png" width="180" alt="ScamShield App Icon">
+</p>
 
-<img src="assets/scamshield-icon.png" width="180" alt="ScamShield App Icon">
+<p align="center">
+  <b>SCAN • LEARN • STAY SAFE</b>
+</p>
 
-**SCAN • LEARN • STAY SAFE**
+ScamShield is an Android application built using **Kotlin and Jetpack Compose**. It combines multi-source URL threat checking with beginner-friendly cybersecurity learning modules.
 
-An Android cybersecurity application built with Kotlin and Jetpack Compose.
-
-</div>
-
----
-
-## 📸 Application Screenshots
-
-### 1. ScamShield Dashboard
-
-![ScamShield Dashboard](./screenshots/Screenshot%201.png)
-
-### 2. Cybersecurity Learning Lab
-
-![Learning Lab Modules](./screenshots/Screenshot%202.png)
-
-### 3. Link Scanner Interface
-
-![Link Scanner Interface](./screenshots/Screenshot%203.png)
-
-### 4. URL Scanning and Threat Analysis
-
-![URL Scanning and Threat Analysis](./screenshots/Screenshot%204.png)
-
-### 5. Scan History
-
-![Scan History](./screenshots/Screenshot%205.png)
+The project demonstrates practical Android development, API integration, backend communication, local data storage, and cybersecurity awareness.
 
 ---
 
-## 🚀 Project Overview
+## 📱 Screenshots
 
-ScamShield is an Android cybersecurity application that combines multi-source URL threat checking, scan management, security reports, and beginner-friendly cybersecurity learning modules in one application.
+<p align="center">
+  <img src="./screenshots/Screenshot%201.png" width="250" alt="ScamShield Dashboard">
+  <img src="./screenshots/Screenshot%202.png" width="250" alt="ScamShield Learning Lab">
+</p>
 
-The project demonstrates practical Android development, backend integration, REST API communication, URL analysis, and cybersecurity awareness.
+<p align="center">
+  <img src="./screenshots/Screenshot%203.png" width="250" alt="ScamShield Link Scanner">
+  <img src="./screenshots/Screenshot%204.png" width="250" alt="ScamShield Scan History">
+  <img src="./screenshots/Screenshot%205.png" width="250" alt="ScamShield Advanced Features">
+</p>
 
-## ✨ Features
+---
 
-### 1. Link Scanner & Threat Detection
-- Scan HTTP and HTTPS URLs.
-- Check URLs using URLhaus and Google Safe Browsing.
-- Display threat verdicts and source-wise results.
-- Show scan reliability information.
-- Explain warnings and detection limitations.
-- Validate URL input before scanning.
+## 🚀 Features
 
-### 2. Scan History Management
-- Save previous scan records.
-- View scan timestamps and detailed results.
-- Search and filter scan history.
-- Copy scanned URLs.
-- Delete individual records.
-- Clear all scan history.
-- Preserve records after restarting the app.
-
-### 3. Link Sharing & Clipboard Scanning
-- Share URLs from other Android applications directly to ScamShield.
-- Automatically populate the scanner with shared URLs.
-- Scan URLs copied to the clipboard.
-
-### 4. Advanced URL Analysis
+### 1. Link Protection & Scanning
+- URL validation and scanning.
+- Multi-source threat intelligence using URLhaus and Google Safe Browsing.
 - Local URL risk analysis using heuristic checks.
+- Detailed scan verdicts and source information.
+- Clipboard URL scanning.
+- Share-to-scan functionality.
 - Duplicate URL detection.
-- Save frequently used URLs as bookmarks.
-- Add personal notes to scan records.
-- View detailed scan information and source evidence.
 
-### 5. Security Reports & Analytics
+### 2. Scan History & Reports
+- Persistent scan history.
+- Search and filter scan records.
+- Individual scan record deletion.
+- Clear all scan history.
+- Advanced scan details.
 - Export scan history as CSV.
 - Generate PDF scan reports.
 - Share scan reports.
-- View scan statistics.
-- Explore seven-day scan analytics.
+- Scan statistics and 7-day analytics.
 
-### 6. Cybersecurity Learning Lab
-- Networking Basics
-- Android Security
-- Kali Linux Lab
-- Network Tools
-- Network Diagnostics
-- Lab Activity Log
+### 3. Saved URLs & Personal Notes
+- Save URLs for future reference.
+- Add personal notes to scanned URLs.
 
-### 7. Interactive Cybersecurity Tools
-- Cybersecurity Knowledge Quiz.
-- Searchable Cybersecurity Glossary.
+### 4. Cybersecurity Learning Lab
+- Networking Basics.
+- Android Security.
+- Kali Linux Lab.
+- Network Tools.
+- Network Diagnostics.
+- Lab Activity Log.
+
+### 5. Learning & Awareness
+- Interactive cybersecurity knowledge quiz.
+- Searchable cybersecurity glossary.
 - Privacy, Safety & App Information Centre.
 
-### 8. Server Connectivity
-- Connect to the deployed Python backend.
-- Check backend availability.
-- Display server connection status.
-- View HTTP status and response time.
-- Perform network diagnostics.
+### 6. Backend Connectivity
+- Live backend health monitoring.
+- REST API communication.
+- Multi-source threat intelligence integration.
 
 ---
 
-## 🧰 Technologies Used
+## 🛠️ Tech Stack
 
 | Technology | Purpose |
 |---|---|
-| Kotlin | Android development |
+| Kotlin | Android application development |
+| Jetpack Compose | Modern UI development |
 | Android Studio | Development environment |
-| Jetpack Compose | User interface |
 | Python | Backend development |
 | REST APIs | Client-server communication |
-| URLhaus | Threat intelligence |
+| URLhaus | Malicious URL intelligence |
 | Google Safe Browsing | Threat detection |
 | SharedPreferences | Local data persistence |
 | Android PdfDocument | PDF report generation |
@@ -121,92 +94,70 @@ The project demonstrates practical Android development, backend integration, RES
 
 ## 🏗️ System Architecture
 
-**Android Application → Python Backend → Threat Intelligence APIs**
+```text
+        Android Application
+                 |
+                 |
+          ScamShield UI
+                 |
+                 |
+           Link Scanner
+                 |
+                 |
+          Python Backend
+                 |
+          -----------------
+          |               |
+       URLhaus       Google Safe
+                       Browsing
+          |               |
+          -----------------
+                 |
+                 |
+          Scan Result
+                 |
+                 |
+       Android Application
+```
 
-1. The user enters, shares, or selects a URL in ScamShield.
-2. The Android application sends the URL to the Python backend.
-3. The backend queries supported threat-intelligence services.
-4. The backend processes the available responses.
-5. The application displays the verdict, source results, and relevant warnings.
+---
 
-### Backend Information
+## 🌐 Backend Information
 
-**Deployment Platform:** Render
+The ScamShield backend is deployed using Render.
 
-**Backend URL:**  
+**Backend URL:**
+
 https://scamshield-1-d2jy.onrender.com
 
-**API Endpoints:**
+**Available endpoints:**
 
-- `GET /health` — Checks backend availability.
-- `POST /check-url` — Processes URL threat-checking requests.
-
----
-
-## ⚠️ Security Limitations
-
-- `NO_KNOWN_THREAT_FOUND` does not guarantee that a URL is safe.
-- Threat databases may not contain newly created or unreported malicious links.
-- Detection depends on external threat-intelligence service availability.
-- Local URL risk analysis is heuristic-based and is not equivalent to verified threat intelligence.
-- ScamShield is an educational project, not a replacement for professional security software.
-- API credentials should remain on the backend and must never be embedded in the Android application or committed to a public repository.
-
-Always exercise caution before opening unfamiliar links, even when a scanner reports no known threat.
+- `/health` — Checks backend connectivity.
+- `/check-url` — Checks submitted URLs against supported threat intelligence sources.
 
 ---
 
-## 🎯 Project Objective
+## ⚠️ Important Security Notes & Limitations
 
-To develop a practical Android cybersecurity application demonstrating URL threat-intelligence integration, backend communication, scan management, security reporting, and interactive cybersecurity education.
-
----
-
-## 🔧 Getting Started
-
-### Prerequisites
-- Android Studio
-- Android SDK
-- Kotlin support
-- Internet connection
-
-### Installation
-
-1. Clone the repository:
-
-   `git clone https://github.com/parthpatel030908-pixel/ScamShield.git`
-
-2. Open the project in Android Studio.
-3. Allow Gradle synchronization to complete.
-4. Build and run the application on an Android emulator or compatible device.
-
-The application uses the deployed backend for URL scanning.
+- A `NO_KNOWN_THREAT_FOUND` result does not guarantee that a URL is safe.
+- Threat intelligence databases may not contain every malicious website.
+- Detection accuracy depends on the availability and coverage of external threat intelligence sources.
+- Local URL risk analysis is heuristic-based and does not independently prove that a website is malicious.
+- Backend API credentials are intended to remain on the server and must not be exposed in the Android application or public repository.
+- ScamShield is an educational cybersecurity project and should not be treated as a complete security solution.
 
 ---
 
-## 👨‍💻 Developer
+## 💻 Getting Started
 
-**Parth Bhut**
+### 1. Clone the repository
 
-First-Year Computer Engineering Student  
-Government Engineering College, Bhavnagar
+```bash
+git clone https://github.com/parthpatel030908-pixel/ScamShield.git
+```
 
-Interested in Cybersecurity, Android Development, and Ethical Hacking.
+### 2. Open the project
 
----
-
-## 📌 Project Status
-
-**Version:** 1.0
-
-**Status:** Initial project development completed.
-
-Built as a learning and portfolio project to explore practical Android development and cybersecurity concepts.
-
----
-
-<div align="center">
-
-**🛡️ ScamShield — Scan • Learn • Stay Safe**
-
-</div>
+- Open Android Studio.
+- Select **Open**.
+- Choose
