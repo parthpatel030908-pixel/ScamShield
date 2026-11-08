@@ -13,19 +13,19 @@ It combines multi-source URL threat checking with an interactive cybersecurity l
 ## 📸 Screenshots
 
 ### 1. ScamShield Dashboard
-![ScamShield Dashboard](./screenshots/screenshot%21.png)
+![ScamShield Dashboard](./screenshots/screenshot%201.png)
 
 ### 2. Learning Lab Modules
-![Learning Lab Modules](./screenshots/screenshot%22.png)
+![Learning Lab Modules](./screenshots/screenshot%202.png)
 
 ### 3. Link Scanner Interface
-![Link Scanner Interface](./screenshots/screenshot%23.png)
+![Link Scanner Interface](./screenshots/screenshot%203.png)
 
 ### 4. URL Scanning and Threat Analysis
-![URL Scanning and Threat Analysis](./screenshots/screenshot%24.png)
+![URL Scanning and Threat Analysis](./screenshots/screenshot%204.png)
 
 ### 5. Scan History
-![Scan History](./screenshots/screenshot%25.png)
+![Scan History](./screenshots/screenshot%205.png)
 
 ---
 
