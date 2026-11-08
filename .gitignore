@@ -1,15 +1,37 @@
+
+# Android Studio / IntelliJ
 *.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
+.gradle/
+.idea/caches/
+.idea/libraries/
+.idea/modules.xml
+.idea/workspace.xml
+.idea/navEditor.xml
+.idea/assetWizardSettings.xml
+
+# Android build files
+/build/
+/captures/
+.externalNativeBuild/
+.cxx/
 local.properties
+**/build/
+
+# Environment variables and API secrets
+.env
+.env.*
+!.env.example
+.scamshield.env
+*.keystore
+*.jks
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+.pytest_cache/
+
+# Operating system files
+.DS_Store
+Thumbs.db
