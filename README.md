@@ -160,4 +160,48 @@ git clone https://github.com/parthpatel030908-pixel/ScamShield.git
 
 - Open Android Studio.
 - Select **Open**.
-- Choose
+- Choose the cloned ScamShield project folder.
+- Allow Gradle to sync.
+
+### 3. Run the application
+
+- Connect an Android device or start an emulator.
+- Click **Run** in Android Studio.
+- Explore the ScamShield dashboard and its features.
+
+---
+
+## 🎯 Project Objectives
+
+- Learn Android application development.
+- Understand REST API integration.
+- Explore URL threat intelligence services.
+- Develop practical cybersecurity awareness.
+- Build an integrated Android and Python backend project.
+
+---
+
+## 👨‍💻 Developer
+
+**Parth Bhut**
+
+First-Year Computer Engineering Student  
+Government Engineering College, Bhavnagar
+
+Interested in Cybersecurity, Android Development and Technology.
+
+---
+
+## 📌 Project Status
+
+**Version:** 1.0
+
+**Development Status:** Initial development completed.
+
+Built as a first major Android cybersecurity project to explore practical application development and cybersecurity concepts.
+
+---
+
+<p align="center">
+  <b>SCAMSHIELD — SCAN • LEARN • STAY SAFE</b>
+</p>
