@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScamShield | Cybersecurity Platform</title>
+
+<style>
+:root {
+  --bg:#08111f;
+  --panel:#142238;
+  --green:#36e6a0;
+  --text:#eaf2ff;
+  --muted:#91a2ba;
+  --red:#ff6b6b;
+  --border:#263b55;
+}
+* {box-sizing:border-box}
+body {
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial,sans-serif;
+}
+header {
+  padding:22px 7%;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--border);
+}
+.logo {font-size:24px;font-weight:bold;color:var(--green)}
+.logo span {color:white}
+.status {font-size:12px;color:var(--green)}
+.hero {padding:55px 7% 30px}
+.hero h1 {font-size:clamp(30px,5vw,48px);margin:0 0 12px}
+.hero h1 span {color:var(--green)}
+.hero p {color:var(--muted);line-height:1.7;max-width:650px}
+nav {
+  display:flex;gap:10px;flex-wrap:wrap;
+  padding:15px 7%;
+  border-bottom:1px solid var(--border);
+}
+nav button,.action {
+  background:var(--panel);
+  color:var(--text);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:12px 18px;
+  cursor:pointer;
+  font-weight:bold;
+}
+nav button.active,.action.primary {
+  background:var(--green);
+  color:#06151a;
+  border-color:var(--green);
+}
+main {padding:30px 7%;max-width:1200px;margin:auto}
+.page {display:none}
+.page.active {display:block}
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(230px,1fr));
+  gap:17px;
+}
+.card {
+  background:var(--panel);
+  border:1px solid var(--border);
+  border-radius:14px;
+  padding:22px;
+  margin-bottom:18px;
+}
+.card h3 {margin-top:0}
+.card p,.muted {color:var(--muted);line-height:1.6}
+.tag {
+  display:inline-block;
+  color:var(--green);
+  font-size:12px;
+  border:1px solid #276c55;
+  border-radius:20px;
+  padding:5px 10px;
+  margin-bottom:12px;
+}
+input {
+  width:100%;
+  padding:15px;
+  background:#091727;
+  color:white;
+  border:1px solid var(--border);
+  border-radius:9px;
+  font-size:15px;
+  margin:12px 0;
+}
+input::placeholder {color:#91a2ba}
+button:disabled {opacity:.5;cursor:not-allowed}
+.result {
+  margin-top:18px;
+  padding:17px;
+  background:#091727;
+  border:1px solid var(--border);
+  border-radius:10px;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+}
+.good {color:var(--green)}
+.bad {color:var(--red)}
+.question {font-size:19px;line-height:1.5}
+.option {
+  display:block;width:100%;text-align:left;
+  margin:10px 0;padding:14px;
+  background:#091727;color:white;
+  border:1px solid var(--border);
+  border-radius:9px;cursor:pointer;
+}
+.option:hover {border-color:var(--green)}
+.option:disabled {cursor:default}
+.small {font-size:12px;color:var(--muted)}
+footer {
+  padding:30px 7%;
+  text-align:center;
+  color:var(--muted);
+  border-top:1px solid var(--border);
+}
+ul {color:var(--muted);line-height:1.9}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">S<span>CAM</span>SHIELD</div>
+  <div class="status">● CYBER PLATFORM</div>
+</header>
+
+<section class="hero">
+  <div class="tag">SCAN • LEARN • STAY SAFE</div>
+  <h1>Your Digital World.<br><span>Your Protection.</span></h1>
+  <p>
+    Explore cybersecurity, check suspicious links and improve
+    your digital security knowledge through interactive learning
+    and challenges.
+  </p>
+</section>
+
+<nav>
+  <button class="active" onclick="showPage('home',this)">Dashboard</button>
+  <button onclick="showPage('protection',this)">Protection</button>
+  <button onclick="showPage('learning',this)">Learning Lab</button>
+  <button onclick="showPage('academy',this)">Cyber Academy</button>
+</nav>
+
+<main>
+
+<!-- DASHBOARD -->
+<section id="home" class="page active">
+  <h2>Dashboard</h2>
+  <p class="muted">Welcome to your cybersecurity learning platform.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="tag">01 / PROTECTION</div>
+      <h3>Link Scanner</h3>
+      <p>Check submitted URLs against connected threat-intelligence sources.</p>
+      <button class="action primary" onclick="showPage('protection')">Open Scanner</button>
+    </div>
+
+    <div class="card">
+      <div class="tag">02 / LEARNING</div>
+      <h3>Learning Lab</h3>
+      <p>Explore networking, Android security and cybersecurity fundamentals.</p>
+      <button class="action" onclick="showPage('learning')">Explore Modules</button>
+    </div>
+
+    <div class="card">
+      <div class="tag">03 / CHALLENGES</div>
+      <h3>Cyber Academy</h3>
+      <p>Test your knowledge, earn points and improve your cybersecurity skills.</p>
+      <button class="action" onclick="showPage('academy')">Enter Academy</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Platform Information</h3>
+    <p>Backend: <span id="serverStatus" class="muted">Checking connection...</span></p>
+    <p class="small">Backend hosted on Render. A temporary delay may occur when the service wakes up.</p>
+  </div>
+</section>
+
+<!-- PROTECTION -->
+<section id="protection" class="page">
+  <h2>Protection Centre</h2>
+  <p class="muted">Submit a URL for a threat-intelligence check.</p>
+
+  <div class="card">
+    <div class="tag">URL INTELLIGENCE</div>
+    <h3>ScamShield Link Scanner</h3>
+    <input id="urlInput" type="url" placeholder="https://example.com">
+    <button class="action primary" id="scanButton" onclick="scanUrl()">Scan URL</button>
+    <div id="scanResult" class="result" hidden></div>
+  </div>
+
+  <div class="card">
+    <h3>Understanding scan results</h3>
+    <ul>
+      <li><b class="bad">Threat detected:</b> A connected source reported a known threat.</li>
+      <li><b class="good">No known threat found:</b> Connected sources did not report a known threat.</li>
+      <li><b>Check unavailable:</b> The scan could not be completed reliably.</li>
+    </ul>
+    <p class="small">No known threat found does not guarantee that a website is safe.</p>
+  </div>
+</section>
+
+<!-- LEARNING LAB -->
+<section id="learning" class="page">
+  <h2>Learning Lab</h2>
+  <p class="muted">Build your cybersecurity foundation step by step.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="tag">NETWORKING</div>
+      <h3>Networking Basics</h3>
+      <p>Understand how devices communicate across networks.</p>
+      <ul>
+        <li>OSI Model and TCP/IP</li>
+        <li>IP addresses and DNS</li>
+        <li>TCP vs UDP</li>
+        <li>HTTP vs HTTPS</li>
+        <li>Ports and protocols</li>
+        <li>Network scenarios</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">MOBILE SECURITY</div>
+      <h3>Android Security</h3>
+      <p>Learn how Android protects apps and user information.</p>
+      <ul>
+        <li>App permissions</li>
+        <li>Application sandboxing</li>
+        <li>Authentication basics</li>
+        <li>Encryption concepts</li>
+        <li>Safe app installation</li>
+        <li>Mobile threat awareness</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">LINUX</div>
+      <h3>Kali Linux Lab</h3>
+      <p>Learn Linux fundamentals in an authorised practice environment.</p>
+      <ul>
+        <li>Terminal fundamentals</li>
+        <li>File system navigation</li>
+        <li>Linux permissions</li>
+        <li>Basic network concepts</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="tag">FUNDAMENTALS</div>
+      <h3>Cybersecurity Concepts</h3>
+      <p>Understand essential defensive security concepts.</p>
+      <ul>
+        <li>Phishing awareness</li>
+        <li>Malware awareness</li>
+        <li>Passwords and MFA</li>
+        <li>Data privacy</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="small">This is the initial web learning interface. The full interactive lessons and simulators will be added in subsequent development.</p>
+</section>
+
+<!-- CYBER ACADEMY -->
+<section id="academy" class="page">
+  <h2>Cyber Academy</h2>
+  <p class="muted">Learn through questions, earn XP and improve your level.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="tag">YOUR PROGRESS</div>
+      <h3><span id="xp">0</span> XP</h3>
+      <p>Level: <span id="level">Beginner</span></p>
+      <p>Correct answers: <span id="correctCount">0</span></p>
+    </div>
+
+    <div class="card">
+      <div class="tag">CHALLENGE MODE</div>
+      <h3>Knowledge Challenge</h3>
+      <p>Answer cybersecurity questions and read the explanations.</p>
+      <button class="action primary" onclick="startQuiz()">Start Quiz</button>
+    </div>
+  </div>
+
+  <div class="card" id="quizBox" hidden>
+    <p class="tag" id="questionNumber">QUESTION 1</p>
+    <h3 class="question" id="questionText"></h3>
+    <div id="options"></div>
+    <div id="feedback" class="result" hidden></div>
+    <button class="action primary" id="nextButton" onclick="nextQuestion()" hidden>Next Question</button>
+  </div>
+
+  <p class="small">Quiz progress is stored in this browser. Website-investigation challenges will be added as a later advanced level.</p>
+</section>
+
+</main>
+
+<footer>
+  <b>SCAMSHIELD</b> — Scan • Learn • Stay Safe
+  <p class="small">Educational cybersecurity platform. Scan results are not a guarantee of website safety.</p>
+</footer>
+
+<script>
+const API = "https://scamshield-1-d2jy.onrender.com";
+
+function showPage(page, button) {
+  document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+  document.getElementById(page).classList.add("active");
+
+  document.querySelectorAll("nav button").forEach(b => b.classList.remove("active"));
+  if (button) button.classList.add("active");
+
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+async function checkServer() {
+  const status = document.getElementById("serverStatus");
+  try {
+    const response = await fetch(API + "/health");
+    if (!response.ok) throw new Error("Server unavailable");
+    const data = await response.json();
+    status.textContent = data.status === "online" ? "ONLINE" : "Response received";
+    status.className = "good";
+  } catch (error) {
+    status.textContent = "Connection unavailable — check backend or browser access";
+    status.className = "bad";
+  }
+}
+
+async function scanUrl() {
+  const input = document.getElementById("urlInput");
+  const result = document.getElementById("scanResult");
+  const button = document.getElementById("scanButton");
+  const url = input.value.trim();
+
+  if (!url) {
+    alert("Please enter a URL first.");
+    return;
+  }
+
+  try {
+    const parsed = new URL(url);
+    if (!["http:", "https:"].includes(parsed.protocol)) {
+      throw new Error("Only HTTP and HTTPS links are supported.");
+    }
+  } catch (error) {
+    alert("Enter a valid HTTP or HTTPS URL.");
+    return;
+  }
+
+  button.disabled = true;
+  button.textContent = "Scanning...";
+  result.hidden = false;
+  result.textContent = "Contacting ScamShield backend...";
+
+  try {
+    const response = await fetch(API + "/check-url", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({url:url})
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || "Scan request failed.");
+    }
+
+    result.replaceChildren();
+
+    const heading = document.createElement("h3");
+    heading.textContent = data.verdict || "Scan completed";
+    heading.className = data.verdict === "THREAT_DETECTED" ? "bad" : "good";
+    result.appendChild(heading);
+
+    const message = document.createElement("p");
+    message.textContent = data.message || "No additional message provided.";
+    result.appendChild(message);
+
+    const address = document.createElement("p");
+    address.textContent = "Scanned URL: " + url;
+    result.appendChild(address);
+
+    if (Array.isArray(data.sources)) {
+      const sourceTitle = document.createElement("b");
+      sourceTitle.textContent = "Threat intelligence sources";
+      result.appendChild(sourceTitle);
+
+      data.sources.forEach(source => {
+        const line = document.createElement("p");
+        line.textContent = source.source + ": " +
+          (source.match ? "Threat match" : "No match");
+        result.appendChild(line);
+      });
+    }
+
+    if (Array.isArray(data.warnings)) {
+      data.warnings.forEach(warning => {
+        const line = document.createElement("p");
+        line.className = "small";
+        line.textContent = "Warning: " + warning;
+        result.appendChild(line);
+      });
+    }
+
+    const disclaimer = document.createElement("p");
+    disclaimer.className = "small";
+    disclaimer.textContent = "A clean result does not guarantee that a URL is safe.";
+    result.appendChild(disclaimer);
+
+  } catch (error) {
+    result.textContent = "Scan unavailable: " + error.message +
+      ". If the backend is online, browser cross-origin (CORS) access may need to be enabled.";
+  } finally {
+    button.disabled = false;
+    button.textContent = "Scan URL";
+  }
+}
+
+/* CYBER ACADEMY QUIZ */
+
+const questions = [
+  {
+    q:"What does HTTPS primarily provide?",
+    options:["Faster internet","Encrypted communication","Free internet access","Unlimited storage"],
+    answer:1,
+    explanation:"HTTPS uses TLS to protect communication between a browser and a website."
+  },
+  {
+    q:"What is phishing?",
+    options:["A computer upgrade","A deceptive attempt to obtain sensitive information","A programming language","A network cable"],
+    answer:1,
+    explanation:"Phishing uses deceptive messages or websites to trick people into sharing information."
+  },
+  {
+    q:"What does DNS do?",
+    options:["Translates domain names into IP addresses","Deletes viruses","Charges a device","Encrypts every file"],
+    answer:0,
+    explanation:"DNS helps devices find the IP address associated with a domain name."
+  },
+  {
+    q:"Which is an example of multi-factor authentication?",
+    options:["Using the same password twice","Password plus an authenticator code","Sharing a password","Turning off screen lock"],
+    answer:1,
+    explanation:"MFA uses more than one type of verification to protect an account."
+  },
+  {
+    q:"What does a firewall help do?",
+    options:["Increase screen brightness","Filter network traffic","Create passwords automatically","Repair a keyboard"],
+    answer:1,
+    explanation:"A firewall filters network traffic according to defined security rules."
+  },
+  {
+    q:"What is an IP address used for?",
+    options:["Identifying a device on a network","Charging a battery","Opening a camera","Compressing images"],
+    answer:0,
+    explanation:"An IP address identifies a network interface for communication."
+  },
+  {
+    q:"What should you do with an unexpected suspicious link?",
+    options:["Open it immediately","Forward it to everyone","Verify the sender and destination first","Enter your password"],
+    answer:2,
+    explanation:"Check the sender and destination carefully. Do not enter personal information on an untrusted page."
+  },
+  {
+    q:"What is the purpose of encryption?",
+    options:["Make data unreadable without the proper key","Increase internet speed","Delete browser history","Change an IP address"],
+    answer:0,
+    explanation:"Encryption transforms data so that it cannot be understood without the appropriate key."
+  },
+  {
+    q:"Which protocol is connection-oriented?",
+    options:["UDP","TCP","DNS","ARP"],
+    answer:1,
+    explanation:"TCP establishes a connection and provides reliable, ordered data delivery."
+  },
+  {
+    q:"What is the safest response to an unknown app requesting unnecessary permissions?",
+    options:["Grant everything","Ignore all warnings","Review its permissions and avoid granting unnecessary access","Share your account"],
+    answer:2,
+    explanation:"Review permissions and grant only access that is necessary and appropriate."
+  }
+];
+
+let quizIndex = 0;
+let score = 0;
+let answered = false;
+let xp = Number(localStorage.getItem("scamshieldXP") || 0);
+let correctCount = Number(localStorage.getItem("scamshieldCorrect") || 0);
+
+function updateProgress() {
+  document.getElementById("xp").textContent = xp;
+  document.getElementById("correctCount").textContent = correctCount;
+  document.getElementById("level").textContent =
+    xp >= 100 ? "Advanced" : xp >= 40 ? "Intermediate" : "Beginner";
+}
+
+function startQuiz() {
+  quizIndex = 0;
+  score = 0;
+  document.getElementById("quizBox").hidden = false;
+  showQuestion();
+  document.getElementById("quizBox").scrollIntoView({behavior:"smooth"});
+}
+
+function showQuestion() {
+  answered = false;
+  const q = questions[quizIndex];
+  document.getElementById("questionNumber").textContent =
+    "QUESTION " + (quizIndex + 1) + " / " + questions.length;
+  document.getElementById("questionText").textContent = q.q;
+
+  const options = document.getElementById("options");
+  options.replaceChildren();
+
+  q.options.forEach((option,index) => {
+    const button = document.createElement("button");
+    button.className = "option";
+    button.textContent = option;
+    button.onclick = () => chooseAnswer(index);
+    options.appendChild(button);
+  });
+
+  document.getElementById("feedback").hidden = true;
+  document.getElementById("nextButton").hidden = true;
+}
+
+function chooseAnswer(index) {
+  if (answered) return;
+  answered = true;
+
+  const q = questions[quizIndex];
+  const buttons = document.querySelectorAll("#options button");
+  buttons.forEach(button => button.disabled = true);
+
+  const feedback = document.getElementById("feedback");
+  feedback.hidden = false;
+
+  if (index === q.answer) {
+    score++;
+    xp += 10;
+    correctCount++;
+    feedback.className = "result good";
+    feedback.textContent = "Correct! +10 XP. " + q.explanation;
+  } else {
+    feedback.className = "result bad";
+    feedback.textContent = "Not quite. Correct answer: " +
+      q.options[q.answer] + ". " + q.explanation;
+  }
+
+  localStorage.setItem("scamshieldXP",xp);
+  localStorage.setItem("scamshieldCorrect",correctCount);
+  updateProgress();
+
+  document.getElementById("nextButton").hidden = false;
+  document.getElementById("nextButton").textContent =
+    quizIndex === questions.length - 1 ? "Finish Quiz" : "Next Question";
+}
+
+function nextQuestion() {
+  quizIndex++;
+
+  if (quizIndex >= questions.length) {
+    document.getElementById("questionNumber").textContent = "CHALLENGE COMPLETED";
+    document.getElementById("questionText").textContent =
+      "You scored " + score + " out of " + questions.length + ".";
+    document.getElementById("options").replaceChildren();
+
+    const feedback = document.getElementById("feedback");
+    feedback.hidden = false;
+    feedback.className = "result good";
+    feedback.textContent = "Keep learning. Your total XP is " + xp + ".";
+
+    document.getElementById("nextButton").hidden = false;
+    document.getElementById("nextButton").textContent = "Play Again";
+    document.getElementById("nextButton").onclick = startQuiz;
+    return;
+  }
+
+  document.getElementById("nextButton").onclick = nextQuestion;
+  showQuestion();
+}
+
+updateProgress();
+checkServer();
+</script>
+
+</body>
+</html>
